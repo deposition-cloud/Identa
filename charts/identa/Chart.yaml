@@ -1,0 +1,6 @@
+apiVersion: v2
+name: identa
+description: Branding infrastructure for codebases
+type: application
+version: 0.1.0
+appVersion: "1.0.0"

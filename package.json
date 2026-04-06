@@ -9,10 +9,17 @@
     "preview": "nuxt preview",
     "generate": "nuxt generate",
     "postinstall": "nuxt prepare",
-    "typecheck": "nuxt typecheck"
+    "typecheck": "nuxt typecheck",
+    "dev:setup": "tsx scripts/dev-setup.ts",
+    "dev:up": "TILT_PORT=11350 tilt up --context kind-kind",
+    "dev:down": "tilt down",
+    "dev:delete": "ctlptl delete -f kind/ctlptl-cluster.yaml"
   },
   "dependencies": {
     "nuxt": "^4.4.2",
     "@nuxt/ui": "^4.6.0"
+  },
+  "devDependencies": {
+    "tsx": "^4.21.0"
   }
 }
