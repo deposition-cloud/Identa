@@ -1,3 +1,0 @@
-# Generation
-
-LLM + image generation.

@@ -1,3 +1,0 @@
-# Discovery
-
-Readme + metadata ingestion.

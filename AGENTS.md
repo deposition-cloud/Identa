@@ -109,17 +109,21 @@ sed -n '1,200p' .agents/AGENTS.md
 
 ## 6. Roadmap Phases
 
+Ordered outside-in: user value first, plumbing later. See `ROADMAP.md` for
+full deliverable tables.
+
 | # | Phase | Status |
 |---|-------|--------|
-| 00 | Foundations — core models, connectors, abstractions | Not started |
-| 01 | GitLab Integration — OAuth, repo discovery | Not started |
-| 02 | Discovery — README + metadata ingestion | Not started |
-| 03 | Grouping — select related repos, define brand family | Not started |
-| 04 | Generation — LLM + image generation | Not started |
-| 05 | Iteration — refinement loop | Not started |
-| 06 | Apply — create MR/PR updates | Not started |
-| 07 | Drift — detect and fix inconsistencies | Not started |
-| 08 | Platform — add GitHub, Bitbucket, others | Not started |
+| 0 | Infrastructure & Shell | ✅ Done |
+| 1 | Logo Generation (Proof of Value) | ✅ Done |
+| 2 | Prompt Intelligence (LLM-generated prompts, LangGraph) | 🔜 Next |
+| 3 | Core Data Models (Project, BrandFamily, Item) | Not started |
+| 4 | Iteration & Refinement (chat-style logo editing) | Not started |
+| 5 | GitLab Integration (OAuth, repo discovery) | Not started |
+| 6 | Grouping (brand families) | Not started |
+| 7 | Apply (MR/PR with assets) | Not started |
+| 8 | Drift Detection | Not started |
+| 9 | Platform Expansion (GitHub, Bitbucket) | Not started |
 
 Each phase must pass its own acceptance criteria before the next begins
 (Validate each phase principle).
@@ -136,3 +140,19 @@ Each phase must pass its own acceptance criteria before the next begins
 When an agent is modifying this project, `GITHUB_USERNAME` and `GITHUB_TOKEN`
 are available as environment variables. Agents may use these credentials to push
 directly to the `main` branch **only when explicitly requested by the human**.
+
+## Learned User Preferences
+
+- Tilt UI port is `11350` to avoid conflicts with other running Tilt instances.
+- Conventional commit messages are generated from `git diff --cached` output.
+- Reference projects for Tilt/Kind patterns: `~/code/ranker/` and `~/code/jetscale/`.
+
+## Learned Workspace Facts
+
+- App runs at `http://localhost:3000`; Tilt UI at `http://localhost:11350`.
+- Working Kind/ctlptl config uses a bare cluster (registry only, no `kindV1Alpha4Cluster` or `containerdConfigPatches`); the `containerdConfigPatches` block crashes the kubelet on this machine.
+- `pnpm dev:setup` creates the Kind cluster + registry via ctlptl; `pnpm dev:up` starts Tilt.
+- The `kind-kind` context must be exported with `kind export kubeconfig` if the cluster exists but the context is absent from `~/.kube/config`.
+- inotify limits must be raised (`fs.inotify.max_user_instances=1024`, `fs.inotify.max_user_watches=524288`) when running multiple Tilt instances; persist in `/etc/sysctl.d/99-inotify.conf`.
+- Tiltfile uses `version_settings(constraint=...)` not the bare `version()` call.
+- Docker image base: `node:22-bookworm-slim` (multi-stage: base → deps → dev → build → release).
